@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class SearchingFilesMain extends SettingsParser {
-    static private String FileLocation;
+    static private String RootFileLocation;
     static private String SearchString;
     static private int stringContainsFolderOrFile;
     static private boolean CaseSensitive;
@@ -11,7 +11,7 @@ public class SearchingFilesMain extends SettingsParser {
     private void setFileLocation () {
         Scanner in = new Scanner(System.in);
         System.out.print("Enter File Path to Root Directory of a Folder: ");
-        FileLocation = in.nextLine();
+        RootFileLocation = in.nextLine();
     }
 
     private void setSearchString () {
@@ -42,19 +42,29 @@ public class SearchingFilesMain extends SettingsParser {
 
     private void sendDataSettingsParser() throws FileNotFoundException {
         SettingsParser settingsParser = new SettingsParser();
-        settingsParser.LoadSettings(FileLocation, SearchString, stringContainsFolderOrFile, CaseSensitive);
+        settingsParser.LoadSettings(RootFileLocation, SearchString, stringContainsFolderOrFile, CaseSensitive);
     }
 
     public static void main(String[] args) throws FileNotFoundException {
         SearchingFilesMain setup = new SearchingFilesMain();
         if (args.length != 4) {
-            System.out.println("java SearchString [FILEPATH] [TERM TO SEARCH FOR] [SEARCH FOLDER, FILE, String of File, or All: <0>, <1>, <2>, <3>] [CaseSensitive: <Yes> or <No>]");
-        }
+            System.out.println("java SearchString [FILEPATH] [TERM TO SEARCH FOR] [CaseSensitive: <Yes> or <No>] [SEARCH FOLDER, FILE, String of File, or All: <0>, <1>, <2>, <3>]");
+            setup.setFileLocation();
+            setup.setSearchString();
+            setup.setCaseSensitive();
+            setup.setStringContainsFolderOrFile();
+        } else {
+            RootFileLocation = args[0];
+            SearchString = args[1];
 
-        setup.setFileLocation();
-        setup.setSearchString();
-        setup.setCaseSensitive();
-        setup.setStringContainsFolderOrFile();
+            if (args[2].equalsIgnoreCase("Yes")) {
+                CaseSensitive = true;
+            } else if (args[2].equalsIgnoreCase("No")) {
+                CaseSensitive = false;
+            }
+
+            stringContainsFolderOrFile = Integer.parseInt(args[2]);
+        }
         setup.sendDataSettingsParser();
     }
 }
