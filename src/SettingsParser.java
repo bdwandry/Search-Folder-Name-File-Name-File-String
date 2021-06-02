@@ -145,9 +145,19 @@ public class SettingsParser {
         }
 
         //Writes out the HTML File
+        boolean ifAnyFoundFlag = false;
         long startTime = System.nanoTime();
         System.out.println("[" + ++iterateThroughSteps + "/" + totalSteps + "] " + decimalFormat.format(((float)iterateThroughSteps/(float) totalSteps) * 100) + "% Completed" +". Writing HTML File to Desktop...");
-        boolean ifAnyFoundFlag = htmlWriter.SetupInitialHTMLSettings(dataObjectArr, searchTerm);
+
+        if (FolderOrFileSearch == 0) {
+            ifAnyFoundFlag = htmlWriter.SetupInitialHTMLSettings(dataObjectArr, searchTerm, FolderArr.size(), 0, 0, RootFolderLocation.replace("\\\\", "\\"));
+        } else if (FolderOrFileSearch == 1) {
+            ifAnyFoundFlag = htmlWriter.SetupInitialHTMLSettings(dataObjectArr, searchTerm, 0, FileNameArr.size(), 0, RootFolderLocation.replace("\\\\", "\\"));
+        } else if (FolderOrFileSearch == 2) {
+            ifAnyFoundFlag = htmlWriter.SetupInitialHTMLSettings(dataObjectArr, searchTerm, 0, 0, FileArr.size(), RootFolderLocation.replace("\\\\", "\\"));
+        } else if (FolderOrFileSearch == 3) {
+            ifAnyFoundFlag = htmlWriter.SetupInitialHTMLSettings(dataObjectArr, searchTerm, FolderArr.size(), FileNameArr.size(), FileArr.size(), RootFolderLocation.replace("\\\\", "\\"));
+        }
         long endTime = System.nanoTime();
         long timeElapsed = endTime - startTime;
 

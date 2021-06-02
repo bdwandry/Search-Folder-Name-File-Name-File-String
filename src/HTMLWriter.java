@@ -11,7 +11,7 @@ public class HTMLWriter {
     ArrayList<DataObject> dataObjectArr;
     String RootFolderName;
 
-    public boolean SetupInitialHTMLSettings(ArrayList<DataObject> dataObjectArrCopy, String searchTerm) throws FileNotFoundException {
+    public boolean SetupInitialHTMLSettings(ArrayList<DataObject> dataObjectArrCopy, String searchTerm, int folderArraySize, int fileNameArrSize, int searchThroughFileSize, String RootFolderLocation) throws FileNotFoundException {
         dataObjectArr = dataObjectArrCopy;
 
         if (dataObjectArr.size() != 0) {
@@ -26,7 +26,7 @@ public class HTMLWriter {
 
             htmlWriter = new File(System.getProperty("user.home") + "\\Desktop" + "\\" + RootFolderName + ".html");
             out = new PrintWriter(htmlWriter);
-            writingHeaderInformation();
+            writingHeaderInformation(folderArraySize, fileNameArrSize, searchThroughFileSize, RootFolderLocation);
             return true;
         } else {
             System.out.println("ERROR: NO FOLDER/FILE CONTAINS THE SELECTED SEARCH TERM: " + searchTerm);
@@ -34,7 +34,7 @@ public class HTMLWriter {
         }
     }
 
-    public void writingHeaderInformation() {
+    public void writingHeaderInformation(int folderArraySize, int fileNameArrSize, int searchThroughFileSize, String rootFolderLocation) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         out.println("<!DOCTYPE html>\n" +
@@ -42,9 +42,28 @@ public class HTMLWriter {
                 "<h1 align='center'> Welcome to the search results html page </h1>\n" +
                 "<h2> Searching: " + dataObjectArr.get(0).getSearchTerm() + "</h2>\n" +
                 "<h2> Case Sensitive: " + dataObjectArr.get(0).getCaseSensitive() + "</h2>\n" +
-                "<h2> HTML Name: <a href=" + System.getProperty("user.home") + "/Desktop" + "/" + RootFolderName + ".html" + ">" + RootFolderName + ".html</a></h2>" +
+                "<h2> Root Folder Location: <a href=\"" + rootFolderLocation + "\">" + rootFolderLocation + "</a></h2>\n" +
+                "<h2> HTML Name: <a href=" + System.getProperty("user.home") + "/Desktop" + "/" + RootFolderName + ".html" + ">" + RootFolderName + ".html</a></h2>\n" +
                 "<h2> Date and Time Generated: " + dtf.format(now) + "</h2>\n"
         );
+
+        if ((folderArraySize != 0 && fileNameArrSize != 0 && searchThroughFileSize != 0)) {
+            out.println("<h2> Number of Folders: " + folderArraySize + "</h2>\n");
+            out.println("<h2> Number of Files: " + fileNameArrSize + "</h2>\n");
+            out.println("<h2> Number of Files to be Searched: " + searchThroughFileSize + "</h2>\n");
+        } else {
+            if (folderArraySize != 0) {
+                out.println("<h2> Number of Folders: " + folderArraySize + "</h2>\n");
+            }
+
+            if (fileNameArrSize != 0) {
+                out.println("<h2> Number of Files: " + fileNameArrSize + "</h2>\n");
+            }
+
+            if (searchThroughFileSize != 0) {
+                out.println("<h2> Number of Files Searched Through: " + searchThroughFileSize + "</h2>\n");
+            }
+        }
         out.flush();
         writeHTMLBody();
     }
