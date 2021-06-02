@@ -1,6 +1,6 @@
 package StringOfAFileSearching;
 
-public class FileObject {
+public class SearchStringFileObject {
     String FileLocation;
     String ContainedLine;
     int LineNumber;

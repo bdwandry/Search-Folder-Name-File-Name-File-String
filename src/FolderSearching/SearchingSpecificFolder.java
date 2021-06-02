@@ -3,7 +3,7 @@ package FolderSearching;
 import java.util.ArrayList;
 
 public class SearchingSpecificFolder {
-    public ArrayList<String> searchFolderName (ArrayList<String> folderArr, String searchTerm,boolean CaseSensitive) {
+    public ArrayList<String> searchFolderName (ArrayList<String> folderArr, String searchTerm, boolean CaseSensitive) {
         ArrayList<String> searchFolderNames = new ArrayList<>();
 
         for (int i = 0; i < folderArr.size(); i++) {

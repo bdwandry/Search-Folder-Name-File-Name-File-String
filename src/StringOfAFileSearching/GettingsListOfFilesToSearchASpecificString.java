@@ -1,10 +1,10 @@
-package FileSearching;
+package StringOfAFileSearching;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GettingsListOfFiles {
+public class GettingsListOfFilesToSearchASpecificString {
     ArrayList<String> singFilePathArr = new ArrayList<>();
 
     //Modified From Stack Overflow

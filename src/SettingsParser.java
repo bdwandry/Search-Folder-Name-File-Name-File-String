@@ -1,6 +1,7 @@
-import StringOfAFileSearching.FileObject;
-import StringOfAFileSearching.GettingsListOfFiles;
-import StringOfAFileSearching.SearchingSpecificFiles;
+import FileSearching.SearchingSpecificFiles;
+import StringOfAFileSearching.SearchStringFileObject;
+import StringOfAFileSearching.GettingsListOfFilesToSearchASpecificString;
+import StringOfAFileSearching.SearchingStringInSpecificFiles;
 import FolderSearching.GettingListOfFolders;
 import FolderSearching.SearchingSpecificFolder;
 
@@ -22,21 +23,30 @@ public class SettingsParser {
 
         //Checks if the User is specifically Searching for Specific Folder[0], File[1], or Both[2]
         ArrayList<String> FolderArr = null;
+        ArrayList<String> FileNameArr = null;
         ArrayList<String> FileArr = null;
 
+        //------------------------------------------------------------------------------------------------------------------------------------------//
         //If Folder [0] is passed through - i.e searching for specific folder name
-        if ((FolderOrFileSearch) == 0 || (FolderOrFileSearch == 2)) {
+        if ((FolderOrFileSearch) == 0 || (FolderOrFileSearch == 3)) {
             GettingListOfFolders gettingListOfFolders = new GettingListOfFolders();
             FolderArr = gettingListOfFolders.ReturnList(RootFolderLocation);
         }
 
         //If file [1] is passed through - i.e. searching for strings in file
-        if ((FolderOrFileSearch == 1) || (FolderOrFileSearch == 2)) {
-            GettingsListOfFiles gettingsListOfFiles = new GettingsListOfFiles();
-            FileArr = gettingsListOfFiles.ReturnList(RootFolderLocation);
+        if ((FolderOrFileSearch == 1) || (FolderOrFileSearch == 3)) {
+            GettingsListOfFilesToSearchASpecificString gettingsListOfFilesToSearchASpecificString = new GettingsListOfFilesToSearchASpecificString();
+            FileNameArr = gettingsListOfFilesToSearchASpecificString.ReturnList(RootFolderLocation);
         }
 
-        //Start Seatching for Folder Name
+        //If file [2] is passed through - i.e. searching for strings in file
+        if ((FolderOrFileSearch == 2) || (FolderOrFileSearch == 3)) {
+            GettingsListOfFilesToSearchASpecificString gettingsListOfFilesToSearchASpecificString = new GettingsListOfFilesToSearchASpecificString();
+            FileArr = gettingsListOfFilesToSearchASpecificString.ReturnList(RootFolderLocation);
+        }
+
+        //------------------------------------------------------------------------------------------------------------------------------------------//
+        //Start Searching for Folder Name
         if (FolderArr != null) {
             SearchingSpecificFolder searchingSpecificFolder = new SearchingSpecificFolder();
             ArrayList<String> folderStringArr = searchingSpecificFolder.searchFolderName(FolderArr, searchTerm, CaseSensitive);
@@ -53,20 +63,37 @@ public class SettingsParser {
             }
         }
 
-        //Start Searching Files;
-        if (FileArr != null) {
+        //Start Stearching File Name
+        if (FileNameArr != null) {
             SearchingSpecificFiles searchingSpecificFiles = new SearchingSpecificFiles();
-            ArrayList<FileObject> fileObjectsArr = searchingSpecificFiles.searchSpecificFile(FileArr, searchTerm, CaseSensitive);
+            ArrayList<String> fileNameArr = searchingSpecificFiles.searchFileName(FileNameArr, searchTerm, CaseSensitive);
 
-            for (int i = 0; i < fileObjectsArr.size(); i++) {
+            for (int i = 0; i < fileNameArr.size(); i++) {
+                DataObject dataObject = new DataObject();
+                dataObject.setSearchTerm(searchTerm);
+                dataObject.setFolderOrFileType("File Name");
+                dataObject.setCaseSensitive(CaseSensitive);
+                dataObject.setRootFolderLocation(RootFolderLocation);
+                dataObject.setFileLocation(fileNameArr.get(i));
+
+                dataObjectArr.add(dataObject);
+            }
+        }
+
+        //Start Searching a String of a File;
+        if (FileArr != null) {
+            SearchingStringInSpecificFiles searchingStringInSpecificFiles = new SearchingStringInSpecificFiles();
+            ArrayList<SearchStringFileObject> searchStringFileObjectsArr = searchingStringInSpecificFiles.searchSpecificFile(FileArr, searchTerm, CaseSensitive);
+
+            for (int i = 0; i < searchStringFileObjectsArr.size(); i++) {
                 DataObject dataObject = new DataObject();
                 dataObject.setSearchTerm(searchTerm);
                 dataObject.setFolderOrFileType("String of a File");
                 dataObject.setCaseSensitive(CaseSensitive);
                 dataObject.setRootFolderLocation(RootFolderLocation);
-                dataObject.setFileLocation(fileObjectsArr.get(i).getFileLocation());
-                dataObject.setSearchLine(fileObjectsArr.get(i).getContainedLine());
-                dataObject.setLineNumber(fileObjectsArr.get(i).getLineNumber());
+                dataObject.setFileLocation(searchStringFileObjectsArr.get(i).getFileLocation());
+                dataObject.setSearchLine(searchStringFileObjectsArr.get(i).getContainedLine());
+                dataObject.setLineNumber(searchStringFileObjectsArr.get(i).getLineNumber());
                 dataObjectArr.add(dataObject);
             }
         }

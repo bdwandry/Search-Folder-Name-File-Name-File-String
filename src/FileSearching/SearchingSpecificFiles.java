@@ -1,46 +1,30 @@
 package FileSearching;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Locale;
 
 public class SearchingSpecificFiles {
 
-    public ArrayList<FileObject> searchSpecificFile(ArrayList<String> FileArr, String SearchTerm, boolean CaseSensitive) throws FileNotFoundException {
-        ArrayList<FileObject> searchFile = new ArrayList<>();
-        for (int i = 0; i < FileArr.size(); i++) {
-            FileObject fileObject = new FileObject();
-            String FilePath = FileArr.get(i).replace("\\", "\\\\");
-            File file = new File(FilePath);
-            Scanner in = new Scanner(file);
-            int lineNumber = 1;
+    public ArrayList<String> searchFileName (ArrayList<String> folderArr, String searchTerm, boolean CaseSensitive) {
+        ArrayList<String> searchFileByName = new ArrayList<>();
 
-            while (in.hasNext()) {
-                String searchLine = in.nextLine();
+        for (int i = 0; i < folderArr.size(); i++) {
+            String ShortName = null;
+            for (int j = folderArr.get(i).length() - 1; j >= 0; j--) {
+                Character ch = folderArr.get(i).charAt(j);
 
-                if (searchLine.contains(SearchTerm) && CaseSensitive) {
-                    fileObject.setFileLocation(FileArr.get(i));
-                    fileObject.setContainedLine(searchLine);
-                    fileObject.setLineNumber(lineNumber);
-                    fileObject.setCaseSensitive(true);
-
-                    searchFile.add(fileObject);
-                } else {
-                    if (searchLine.toLowerCase().contains(SearchTerm.toLowerCase())) {
-                        fileObject.setFileLocation(FileArr.get(i));
-                        fileObject.setContainedLine(searchLine);
-                        fileObject.setLineNumber(lineNumber);
-                        fileObject.setCaseSensitive(false);
-
-                        searchFile.add(fileObject);
-                    }
+                if (ch.equals('\\')) {
+                    ShortName = folderArr.get(i).substring(j + 1);
+                    break;
                 }
+            }
 
-                lineNumber++;
+            if (ShortName.contains(searchTerm) && CaseSensitive) {
+                searchFileByName.add(folderArr.get(i));
+            } else if (ShortName.toLowerCase().contains(searchTerm) && !CaseSensitive) {
+                searchFileByName.add(folderArr.get(i));
             }
         }
 
-        return searchFile;
+        return searchFileByName;
     }
 }

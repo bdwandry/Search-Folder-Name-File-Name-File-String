@@ -22,7 +22,7 @@ public class SearchingFilesMain extends SettingsParser {
 
     private void setStringContainsFolderOrFile () {
         Scanner in = new Scanner(System.in);
-        System.out.print("Search just Folder Names [0], Files [1], or Both [2]? [0], [1], [2]: ");
+        System.out.print("Search just Folder Names [0], File Names [1], String in a File [3],or All [4]? <0>, <1>, <2>, or <3>: ");
         stringContainsFolderOrFile = in.nextInt();
     }
 
@@ -48,13 +48,13 @@ public class SearchingFilesMain extends SettingsParser {
     public static void main(String[] args) throws FileNotFoundException {
         SearchingFilesMain setup = new SearchingFilesMain();
         if (args.length != 4) {
-            System.out.println("java SearchString [FILEPATH] [TERM TO SEARCH FOR] [SEARCH FOLDER, FILE, OR BOTH: <0>, <1>, <2>] [CaseSensitive: <Yes> or <No>]");
+            System.out.println("java SearchString [FILEPATH] [TERM TO SEARCH FOR] [SEARCH FOLDER, FILE, String of File, or All: <0>, <1>, <2>, <3>] [CaseSensitive: <Yes> or <No>]");
         }
 
         setup.setFileLocation();
         setup.setSearchString();
-        setup.setStringContainsFolderOrFile();
         setup.setCaseSensitive();
+        setup.setStringContainsFolderOrFile();
         setup.sendDataSettingsParser();
     }
 }
