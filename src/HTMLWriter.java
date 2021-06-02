@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class HTMLWriter {
@@ -31,12 +33,15 @@ public class HTMLWriter {
     }
 
     public void writingHeaderInformation() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
         out.println("<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<h1 align='center'> Welcome to the search results html page </h1>\n" +
                 "<h2> Searching: " + dataObjectArr.get(0).getSearchTerm() + "</h2>\n" +
                 "<h2> Case Sensitive: " + dataObjectArr.get(0).getCaseSensitive() + "</h2>\n" +
-                "<h2> HTML Name: <a href=" + System.getProperty("user.home") + "/Desktop" + "/" + RootFolderName + ".html" + ">" + RootFolderName + ".html</a></h2>\n"
+                "<h2> HTML Name: <a href=" + System.getProperty("user.home") + "/Desktop" + "/" + RootFolderName + ".html" + ">" + RootFolderName + ".html</a></h2>" +
+                "<h2> Date and Time Generated: " + dtf.format(now) + "</h2>\n"
         );
         out.flush();
         writeHTMLBody();
