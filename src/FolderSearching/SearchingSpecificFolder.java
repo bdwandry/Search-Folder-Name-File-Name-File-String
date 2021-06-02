@@ -7,9 +7,19 @@ public class SearchingSpecificFolder {
         ArrayList<String> searchFolderNames = new ArrayList<>();
 
         for (int i = 0; i < folderArr.size(); i++) {
-            if (folderArr.get(i).contains(searchTerm) && CaseSensitive) {
+            String ShortName = null;
+            for (int j = folderArr.get(i).length() - 1; j >= 0; j--) {
+                Character ch = folderArr.get(i).charAt(j);
+
+                if (ch.equals('\\')) {
+                    ShortName = folderArr.get(i).substring(j + 1);
+                    break;
+                }
+            }
+
+            if (ShortName.contains(searchTerm) && CaseSensitive) {
                 searchFolderNames.add(folderArr.get(i));
-            } else if (folderArr.get(i).toLowerCase().contains(searchTerm.toLowerCase()) && !CaseSensitive) {
+            } else if (ShortName.toLowerCase().contains(searchTerm.toLowerCase()) && !CaseSensitive) {
                 searchFolderNames.add(folderArr.get(i));
             }
         }
