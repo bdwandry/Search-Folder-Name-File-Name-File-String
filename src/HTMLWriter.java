@@ -9,20 +9,25 @@ public class HTMLWriter {
     ArrayList<DataObject> dataObjectArr;
     String RootFolderName;
 
-    public void SetupInitialHTMLSettings(ArrayList<DataObject> dataObjectArrCopy) throws FileNotFoundException {
+    public void SetupInitialHTMLSettings(ArrayList<DataObject> dataObjectArrCopy, String searchTerm) throws FileNotFoundException {
         dataObjectArr = dataObjectArrCopy;
-        for (int i = dataObjectArr.get(0).getRootFolderLocation().length() - 1; i >= 0; i--) {
-            Character ch = dataObjectArr.get(0).getRootFolderLocation().charAt(i);
 
-            if (ch.equals('\\')) {
-                RootFolderName = dataObjectArr.get(0).getRootFolderLocation().substring(i + 1);
-                break;
+        if (dataObjectArr.size() != 0) {
+            for (int i = dataObjectArr.get(0).getRootFolderLocation().length() - 1; i >= 0; i--) {
+                Character ch = dataObjectArr.get(0).getRootFolderLocation().charAt(i);
+
+                if (ch.equals('\\')) {
+                    RootFolderName = dataObjectArr.get(0).getRootFolderLocation().substring(i + 1);
+                    break;
+                }
             }
-        }
 
-        htmlWriter = new File(System.getProperty("user.home") + "/Desktop" + "/" + RootFolderName + ".html");
-        out = new PrintWriter(htmlWriter);
-        writingHeaderInformation();
+            htmlWriter = new File(System.getProperty("user.home") + "/Desktop" + "/" + RootFolderName + ".html");
+            out = new PrintWriter(htmlWriter);
+            writingHeaderInformation();
+        } else {
+            System.out.println("ERROR: NO FOLDER/FILE CONTAINS THE SELECTED SEARCH TERM: " + searchTerm);
+        }
     }
 
     public void writingHeaderInformation() {
@@ -60,9 +65,9 @@ public class HTMLWriter {
                 out.println("<h3><li> Type of Search: " + dataObjectArr.get(i).getFolderOrFileType() + "</li></h3>");
             }
 
-            if (dataObjectArr.get(i).getSearchLine().contains("<") || dataObjectArr.get(i).getSearchLine().contains(">")) {
+            if (dataObjectArr.get(i).getFolderOrFileType().equals("String of a File") && (dataObjectArr.get(i).getSearchLine().contains("<") || dataObjectArr.get(i).getSearchLine().contains(">"))) {
                 out.println("<p style=\"margin-left: 40px\"/><p><xmp style=\"margin-left: 40px\"> " + "Line #" + dataObjectArr.get(i).getLineNumber() +  ". " + dataObjectArr.get(i).getSearchLine() + "</xmp></p>");
-            } else {
+            } else if (dataObjectArr.get(i).getFolderOrFileType().equals("String of a File")) {
                 out.println("<p style=\"margin-left: 40px\">" + "Line #" + dataObjectArr.get(i).getLineNumber() + ". " + dataObjectArr.get(i).getSearchLine() + "</p>");
             }
 

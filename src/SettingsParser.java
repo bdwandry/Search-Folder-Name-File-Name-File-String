@@ -1,7 +1,8 @@
-import FileSearching.FileObject;
-import FileSearching.GettingsListOfFiles;
-import FileSearching.SearchingSpecificFiles;
+import StringOfAFileSearching.FileObject;
+import StringOfAFileSearching.GettingsListOfFiles;
+import StringOfAFileSearching.SearchingSpecificFiles;
 import FolderSearching.GettingListOfFolders;
+import FolderSearching.SearchingSpecificFolder;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -20,17 +21,36 @@ public class SettingsParser {
         }
 
         //Checks if the User is specifically Searching for Specific Folder[0], File[1], or Both[2]
-        ArrayList<String> FolderArr;
+        ArrayList<String> FolderArr = null;
         ArrayList<String> FileArr = null;
 
+        //If Folder [0] is passed through - i.e searching for specific folder name
         if ((FolderOrFileSearch) == 0 || (FolderOrFileSearch == 2)) {
             GettingListOfFolders gettingListOfFolders = new GettingListOfFolders();
+            FolderArr = gettingListOfFolders.ReturnList(RootFolderLocation);
         }
 
         //If file [1] is passed through - i.e. searching for strings in file
         if ((FolderOrFileSearch == 1) || (FolderOrFileSearch == 2)) {
             GettingsListOfFiles gettingsListOfFiles = new GettingsListOfFiles();
             FileArr = gettingsListOfFiles.ReturnList(RootFolderLocation);
+        }
+
+        //Start Seatching for Folder Name
+        if (FolderArr != null) {
+            SearchingSpecificFolder searchingSpecificFolder = new SearchingSpecificFolder();
+            ArrayList<String> folderStringArr = searchingSpecificFolder.searchFolderName(FolderArr, searchTerm, CaseSensitive);
+
+            for (int i = 0; i < folderStringArr.size(); i++) {
+                DataObject dataObject = new DataObject();
+                dataObject.setSearchTerm(searchTerm);
+                dataObject.setFolderOrFileType("Folder Name");
+                dataObject.setCaseSensitive(CaseSensitive);
+                dataObject.setRootFolderLocation(RootFolderLocation);
+                dataObject.setFileLocation(folderStringArr.get(i));
+
+                dataObjectArr.add(dataObject);
+            }
         }
 
         //Start Searching Files;
@@ -52,6 +72,6 @@ public class SettingsParser {
         }
 
         //Writes out the HTML File
-        htmlWriter.SetupInitialHTMLSettings(dataObjectArr);
+        htmlWriter.SetupInitialHTMLSettings(dataObjectArr, searchTerm);
     }
 }

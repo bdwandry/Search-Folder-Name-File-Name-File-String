@@ -1,11 +1,10 @@
-package FolderSearching;
-
+package StringOfAFileSearching;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GettingListOfFolders {
+public class GettingsListOfFiles {
     ArrayList<String> singFilePathArr = new ArrayList<>();
 
     //Modified From Stack Overflow
@@ -13,11 +12,12 @@ public class GettingListOfFolders {
         File directory = new File(directoryName);
         List<File> resultList = new ArrayList<File>();
         File[] fList = directory.listFiles();
+        resultList.addAll(Arrays.asList(fList));
 
-        assert fList != null;
         for (File file : fList) {
-            if (file.isDirectory()) {
+            if (file.isFile()) {
                 singFilePathArr.add(file.getAbsolutePath());
+            } else if (file.isDirectory()) {
                 resultList.addAll(listf(file.getAbsolutePath()));
             }
         }
