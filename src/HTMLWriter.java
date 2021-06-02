@@ -11,7 +11,7 @@ public class HTMLWriter {
     ArrayList<DataObject> dataObjectArr;
     String RootFolderName;
 
-    public void SetupInitialHTMLSettings(ArrayList<DataObject> dataObjectArrCopy, String searchTerm) throws FileNotFoundException {
+    public boolean SetupInitialHTMLSettings(ArrayList<DataObject> dataObjectArrCopy, String searchTerm) throws FileNotFoundException {
         dataObjectArr = dataObjectArrCopy;
 
         if (dataObjectArr.size() != 0) {
@@ -24,11 +24,13 @@ public class HTMLWriter {
                 }
             }
 
-            htmlWriter = new File(System.getProperty("user.home") + "/Desktop" + "/" + RootFolderName + ".html");
+            htmlWriter = new File(System.getProperty("user.home") + "\\Desktop" + "\\" + RootFolderName + ".html");
             out = new PrintWriter(htmlWriter);
             writingHeaderInformation();
+            return true;
         } else {
             System.out.println("ERROR: NO FOLDER/FILE CONTAINS THE SELECTED SEARCH TERM: " + searchTerm);
+            return false;
         }
     }
 

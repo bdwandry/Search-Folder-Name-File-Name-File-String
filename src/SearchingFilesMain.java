@@ -12,6 +12,16 @@ public class SearchingFilesMain extends SettingsParser {
         Scanner in = new Scanner(System.in);
         System.out.print("Enter File Path to Root Directory of a Folder: ");
         RootFileLocation = in.nextLine();
+
+
+        String directoryPath = RootFileLocation;
+        File file = new File(directoryPath);
+        while (!file.isDirectory()) {
+            System.out.println("ERROR NOT A VALID DIRECTORY");
+            System.out.print("Enter a Valid Directory: ");
+            RootFileLocation = in.nextLine();
+            file = new File(RootFileLocation);
+        }
     }
 
     private void setSearchString () {
@@ -24,6 +34,10 @@ public class SearchingFilesMain extends SettingsParser {
         Scanner in = new Scanner(System.in);
         System.out.print("Search just Folder Names [0], File Names [1], String in a File [2],or All [3]? <0>, <1>, <2>, or <3>: ");
         stringContainsFolderOrFile = in.nextInt();
+        while (stringContainsFolderOrFile < 0 || stringContainsFolderOrFile > 3) {
+            System.out.print("ERROR, ENTER A VALID RESPONSE NUMBER OF EITHER: 0, 1, 2, 3: ");
+            stringContainsFolderOrFile = in.nextInt();
+        }
     }
 
     private void setCaseSensitive () {
@@ -31,13 +45,17 @@ public class SearchingFilesMain extends SettingsParser {
         System.out.print("Will the Search be case sensitive? <Yes> or <No>: ");
         String FlagString = in.nextLine();
 
-        if (FlagString.equalsIgnoreCase("Yes")) {
-            CaseSensitive = true;
-        }
-
-        if (FlagString.equalsIgnoreCase("No")) {
-            CaseSensitive = false;
-        }
+        do {
+            if (FlagString.equalsIgnoreCase("Yes")) {
+                CaseSensitive = true;
+            } else if (FlagString.equalsIgnoreCase("No")) {
+                CaseSensitive = false;
+            } else {
+                System.out.println("ERROR, THE RESPONSE NEEDS TO BE 'YES' OR 'NO'");
+                System.out.print("Enter a new Response: ");
+                FlagString = in.nextLine();
+            }
+        } while (!((FlagString.equalsIgnoreCase("Yes")) || (FlagString.equalsIgnoreCase("No"))));
     }
 
     private void sendDataSettingsParser() throws FileNotFoundException {
@@ -54,16 +72,36 @@ public class SearchingFilesMain extends SettingsParser {
             setup.setCaseSensitive();
             setup.setStringContainsFolderOrFile();
         } else {
+            Scanner in = new Scanner(System.in);
             RootFileLocation = args[0];
-            SearchString = args[1];
-
-            if (args[2].equalsIgnoreCase("Yes")) {
-                CaseSensitive = true;
-            } else if (args[2].equalsIgnoreCase("No")) {
-                CaseSensitive = false;
+            String directoryPath = RootFileLocation;
+            File file = new File(directoryPath);
+            while (!file.isDirectory()) {
+                System.out.println("ERROR NOT A VALID DIRECTORY");
+                System.out.print("Enter a Valid Directory: ");
+                RootFileLocation = in.nextLine();
+                file = new File(RootFileLocation);
             }
 
-            stringContainsFolderOrFile = Integer.parseInt(args[2]);
+            SearchString = args[1];
+            String FlagString = args[2];
+            do {
+                if (FlagString.equalsIgnoreCase("Yes")) {
+                    CaseSensitive = true;
+                } else if (FlagString.equalsIgnoreCase("No")) {
+                    CaseSensitive = false;
+                } else {
+                    System.out.println("ERROR, THE RESPONSE NEEDS TO BE 'YES' OR 'NO'");
+                    System.out.print("Enter a new Response: ");
+                    FlagString = in.nextLine();
+                }
+            } while (!((FlagString.equalsIgnoreCase("Yes")) || (FlagString.equalsIgnoreCase("No"))));
+
+            stringContainsFolderOrFile = Integer.parseInt(args[3]);
+            while (stringContainsFolderOrFile < 0 || stringContainsFolderOrFile > 3) {
+                System.out.print("ERROR, ENTER A VALID RESPONSE NUMBER OF EITHER: 0, 1, 2, 3: ");
+                stringContainsFolderOrFile = in.nextInt();
+            }
         }
         setup.sendDataSettingsParser();
     }
