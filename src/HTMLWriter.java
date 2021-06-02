@@ -69,6 +69,7 @@ public class HTMLWriter {
                 out.println("<p style=\"margin-left: 40px\"/><p><xmp style=\"margin-left: 40px\"> " + "Line #" + dataObjectArr.get(i).getLineNumber() +  ". " + dataObjectArr.get(i).getSearchLine() + "</xmp></p>");
             } else if (dataObjectArr.get(i).getFolderOrFileType().equals("String of a File")) {
                 out.println("<p style=\"margin-left: 40px\">" + "Line #" + dataObjectArr.get(i).getLineNumber() + ". " + dataObjectArr.get(i).getSearchLine() + "</p>");
+                out.flush();
             }
 
             out.flush();

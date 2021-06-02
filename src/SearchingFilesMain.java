@@ -22,7 +22,7 @@ public class SearchingFilesMain extends SettingsParser {
 
     private void setStringContainsFolderOrFile () {
         Scanner in = new Scanner(System.in);
-        System.out.print("Search just Folder Names [0], File Names [1], String in a File [3],or All [4]? <0>, <1>, <2>, or <3>: ");
+        System.out.print("Search just Folder Names [0], File Names [1], String in a File [2],or All [3]? <0>, <1>, <2>, or <3>: ");
         stringContainsFolderOrFile = in.nextInt();
     }
 
